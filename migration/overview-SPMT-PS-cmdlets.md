@@ -67,7 +67,7 @@ The PowerShell cmdlets provide the same functionalities as the [SharePoint Migra
 
    *$env:UserProfile\Documents\WindowsPowerShell\Modules\Microsoft.SharePoint.MigrationTool.PowerShell*
 
-   Make sure you have DLLs inside of it.
+   Make sure you have DLLs inside of it, if you're using OneDrive you may need to copy the WindowsPowershell Folder into OneDrive / Documents.
 3. From this location, run the following PowerShell command
 
    ```powershell
@@ -179,6 +179,25 @@ Two migration tasks are defined in the file of spmt.csv.
 ```dos
 D:\MigrationTest\Files\Average_1M\c,,,https://SPOSite.sharepoint.com,Documents,Test
 C:\work\Powershell\negative,,,https://SPOSite.sharepoint.com/,Documents,DocLibrary_SubfolderName
+```
+
+Example 4:  IT Admin wants to do a bulk SharePoint Server migration by loading a .csv file.  The sample file is below.
+
+```powershell
+Load CSV;
+$csvItems = import-csv "C:\spmt.csv" -Header c1,c2,c3,c4,c5,c6
+ForEach ($item in $csvItems)
+{
+    Write-Host $item.c1
+   Add-SPMTTask -SharePointSourceSiteUrl $item.c1 -SharePointSourceCredential $Global:SPCredential -SourceList $item.c2   -SourceListRelativePath $item.c3   -TargetSiteUrl $item.c4   -TargetList $item.c5   -TargetListRelativePath $item.c6
+}
+```
+
+Two migration tasks are defined below.
+
+```dos
+http://SourceSharePoint2013,LibraryName,Folder,https://SPONlineDestination,Documents,Folder
+http://SourceSharePoint2013,LibraryName,Folder1,https://SPONlineDestination,Documents,Folder1
 ```
 
 Code snippets for bulk migration by loading one JSON file:
